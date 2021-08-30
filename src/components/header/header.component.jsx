@@ -8,13 +8,13 @@ import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 import { selectCurrentUser } from '../../redux/user/user.selector';
 import { selectCartHidden } from '../../redux/cart/cart.selectors';
 
-import { ReactComponent as Logo } from '../../assets/crown.svg';
+import { signOutStart } from '../../redux/user/user.actions';
 
-import { auth } from '../../firebase/firebase.utils';
+import { ReactComponent as Logo } from '../../assets/crown.svg';
 
 import './header.styles.scss';
 
-const Header = ({currentUser, cartDropdownHidden}) => (
+const Header = ({currentUser, cartDropdownHidden, signOutStart}) => (
   <div className="header">
     <Link className="logo-container" to="/">
       <Logo className="logo"/>
@@ -24,7 +24,7 @@ const Header = ({currentUser, cartDropdownHidden}) => (
       <Link className="option" to="/contact">CONTACTO</Link>
       {
         currentUser ?
-        <div className="option" onClick={() => auth.signOut()}>CERRAR SESIÓN</div>
+        <div className="option" onClick={() => signOutStart()}>CERRAR SESIÓN</div>
         :
         <Link className="option" to="/signin">INICIAR SESIÓN</Link>
       }
@@ -39,4 +39,8 @@ const mapStateToProps = state => ({
   cartDropdownHidden: selectCartHidden(state)
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = dispatch => ({
+  signOutStart: () => dispatch(signOutStart())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
